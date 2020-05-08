@@ -1,11 +1,16 @@
 '''
 Opens a pyglet window and starts the game
 '''
-import pyglet
-import glooey
+import json
+import pathlib
 
-from gui_assets.labels import Title
+import glooey
+import pyglet
+
+from game_assets.player import Player
 from gui_assets.buttons import MenuButton
+from gui_assets.labels import Title
+
 
 class Window(pyglet.window.Window):
     '''
@@ -29,10 +34,11 @@ class Window(pyglet.window.Window):
         '''
         Draws the window
         '''
+        self.clear()
         if self.main_menu:
             self.menu_batch.draw()
         else:
-            self.clear()
+            
             self.game_batch.draw()
 
 class Game():
@@ -54,7 +60,8 @@ class Game():
         self.window.set_caption("Pyglet Platformer")
 
         self.load_menu_batch()
-        self.load_game_batch()
+
+        self.current_level = 0
 
         self.paused = False
 
@@ -75,18 +82,32 @@ class Game():
         menu_gui.add(v_container)
 
     
-    def load_game_batch(self):
-        '''
-        Loads all of the items for the initial game
-        '''
-
-    
     def play(self):
         '''
-        Loads the first level
+        Loads the level
         '''
 
-        print("play")
+        self.window.main_menu = False
+
+        self.load_level()
+
+    def load_level(self):
+        '''
+        Decodes the level from the level.json
+        '''
+
+        level_path = pathlib.Path(
+            "static_assets/levels/level{}.json".format(self.current_level)
+        )
+
+        with level_path.open(mode="r") as data:
+            level_data = json.load(data)
+        
+        self.player = Player(
+            level_data["player_spawn"]["x"],
+            level_data["player_spawn"]["y"],
+            batch=self.batches["game_batch"]
+        )
     
     def exit_game(self):
         '''
