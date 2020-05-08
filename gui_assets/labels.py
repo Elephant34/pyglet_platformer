@@ -6,7 +6,7 @@ import glooey
 class Title(glooey.Label):
 
     custom_alignment = "center"
-    custom_padding = 50
+    custom_bottom_padding = 50
 
     custom_color = "#ffffff"
     custom_font_name = "Arial"

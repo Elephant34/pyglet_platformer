@@ -86,11 +86,14 @@ class Game():
         '''
         Loads the first level
         '''
+
+        print("play")
     
     def exit_game(self):
         '''
         Quits the game
         '''
+        self.window.close()
     
     def update(self, dt):
         '''
