@@ -4,6 +4,9 @@ Opens a pyglet window and starts the game
 import pyglet
 import glooey
 
+from gui_assets.labels import Title
+from gui_assets.buttons import MenuButton
+
 class Window(pyglet.window.Window):
     '''
     The main game window
@@ -59,6 +62,17 @@ class Game():
         Loads all of the items for the main menu GUI
         '''
 
+        menu_gui = glooey.Gui(self.window, batch=self.batches["menu_batch"])
+
+        v_container = glooey.VBox()
+        v_container.alignment = "center"
+
+        v_container.add(Title("Platformer"))
+        v_container.add(MenuButton("Play", self.play))
+        v_container.add(MenuButton("Exit", self.exit_game))
+
+        menu_gui.add(v_container)
+
         return
     
     def load_game_batch(self):
@@ -67,6 +81,16 @@ class Game():
         '''
 
         return
+    
+    def play(self):
+        '''
+        Loads the first level
+        '''
+    
+    def exit_game(self):
+        '''
+        Quits the game
+        '''
     
     def update(self, dt):
         '''
