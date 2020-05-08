@@ -3,6 +3,7 @@ Sets up the label themes
 '''
 import glooey
 
+
 class Title(glooey.Label):
 
     custom_alignment = "center"
@@ -12,6 +13,7 @@ class Title(glooey.Label):
     custom_font_name = "Arial"
     custom_font_size = 50
     custom_bold = True
+
 
 class Standared(glooey.Label):
 

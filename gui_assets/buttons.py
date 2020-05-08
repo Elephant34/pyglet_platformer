@@ -4,6 +4,7 @@ Sets up the button themes
 import glooey
 from gui_assets.labels import Standared
 
+
 class MenuButton(glooey.Button):
     Foreground = Standared
     custom_alignment = "center"

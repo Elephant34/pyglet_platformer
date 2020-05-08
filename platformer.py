@@ -38,8 +38,8 @@ class Window(pyglet.window.Window):
         if self.main_menu:
             self.menu_batch.draw()
         else:
-            
             self.game_batch.draw()
+
 
 class Game():
     '''
@@ -54,7 +54,6 @@ class Game():
             "game_batch": pyglet.graphics.Batch(),
             "menu_batch": pyglet.graphics.Batch(),
         }
-
 
         self.window = Window(800, 600, self.batches)
         self.window.set_caption("Pyglet Platformer")
@@ -81,7 +80,6 @@ class Game():
 
         menu_gui.add(v_container)
 
-    
     def play(self):
         '''
         Loads the level
@@ -102,24 +100,23 @@ class Game():
 
         with level_path.open(mode="r") as data:
             level_data = json.load(data)
-        
+
         self.player = Player(
             level_data["player_spawn"]["x"],
             level_data["player_spawn"]["y"],
             batch=self.batches["game_batch"]
         )
-    
+
     def exit_game(self):
         '''
         Quits the game
         '''
         self.window.close()
-    
+
     def update(self, dt):
         '''
         Updates all loaded enities and passes required data
         '''
-
 
 
 if __name__ == "__main__":
