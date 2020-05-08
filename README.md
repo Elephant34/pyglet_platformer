@@ -1,2 +1,3 @@
 # pyglet_platformer
- A simple platformer game made in pyglet
+## version dev
+ A simple platformer game made with pyglet
