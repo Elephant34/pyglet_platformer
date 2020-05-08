@@ -1,11 +1,12 @@
 '''
 The player controled character
 '''
+import pyglet
+
 from game_assets import resources
-from game_assets.collision_object import CollisionObject
 
 
-class Player(CollisionObject):
+class Player(pyglet.sprite.Sprite):
     '''
     Creates a user interactable player
     '''
