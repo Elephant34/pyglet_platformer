@@ -24,7 +24,6 @@ class Window(pyglet.window.Window):
         self.menu_batch = batches["menu_batch"]
 
         self.main_menu = True
-        self.pause = True
 
     def on_draw(self):
         '''
@@ -32,7 +31,7 @@ class Window(pyglet.window.Window):
         '''
         if self.main_menu:
             self.menu_batch.draw()
-        elif not self.pause:
+        else:
             self.clear()
             self.game_batch.draw()
 
@@ -57,6 +56,8 @@ class Game():
         self.load_menu_batch()
         self.load_game_batch()
 
+        self.paused = False
+
     def load_menu_batch(self):
         '''
         Loads all of the items for the main menu GUI
@@ -73,14 +74,12 @@ class Game():
 
         menu_gui.add(v_container)
 
-        return
     
     def load_game_batch(self):
         '''
         Loads all of the items for the initial game
         '''
 
-        return
     
     def play(self):
         '''
@@ -100,7 +99,6 @@ class Game():
         Updates all loaded enities and passes required data
         '''
 
-        return
 
 
 if __name__ == "__main__":
