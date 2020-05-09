@@ -11,13 +11,13 @@ class Player(pyglet.sprite.Sprite):
     Creates a user interactable player
     '''
 
-    def __init__(self, x, y, **kwarg):
+    def __init__(self, x, y, **kwargs):
         '''
         Sets up the player
         '''
         self.img = resources.images["player"]
 
-        super().__init__(self.img, **kwarg)
+        super().__init__(self.img, **kwargs)
 
         self.x = x
         self.y = y

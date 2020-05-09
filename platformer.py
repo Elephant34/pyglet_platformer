@@ -7,7 +7,7 @@ import pathlib
 import glooey
 import pyglet
 
-from game_assets.player import Player
+from game_assets import player, coin, platform
 from gui_assets.buttons import MenuButton
 from gui_assets.labels import Title
 
@@ -101,11 +101,30 @@ class Game():
         with level_path.open(mode="r") as data:
             level_data = json.load(data)
 
-        self.player = Player(
+        self.player = player.Player(
             level_data["player_spawn"]["x"],
             level_data["player_spawn"]["y"],
             batch=self.batches["game_batch"]
         )
+
+        self.platform_list = []
+        for i in level_data["platforms"]:
+            temp = platform.Platform(
+                    i["x"],
+                    i["y"],
+                    batch=self.batches["game_batch"]
+                )
+            temp.scale_x = i["scale_x"]
+            self.platform_list.append(temp)
+
+        self.coin_list = []
+        for i in level_data["coins"]:
+            temp = coin.Coin(
+                x=i["x"],
+                y=i["y"],
+                batch=self.batches["game_batch"]
+            )
+            self.coin_list.append(temp)
 
     def exit_game(self):
         '''
