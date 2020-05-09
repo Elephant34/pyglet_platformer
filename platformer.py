@@ -9,7 +9,7 @@ import pyglet
 
 from game_assets import player, coin, platform
 from gui_assets.buttons import MenuButton
-from gui_assets.labels import Title
+from gui_assets.labels import Title, Standared
 
 
 class Window(pyglet.window.Window):
@@ -54,6 +54,8 @@ class Game():
             "game_batch": pyglet.graphics.Batch(),
             "menu_batch": pyglet.graphics.Batch(),
         }
+        self.gui_group = pyglet.graphics.OrderedGroup(1)
+        self.game_group = pyglet.graphics.OrderedGroup(0)
 
         self.window = Window(800, 600, self.batches)
         self.window.set_caption("Pyglet Platformer")
@@ -61,6 +63,7 @@ class Game():
         self.load_menu_batch()
 
         self.current_level = 0
+        self.score = 0
 
         self.paused = False
 
@@ -69,7 +72,11 @@ class Game():
         Loads all of the items for the main menu GUI
         '''
 
-        menu_gui = glooey.Gui(self.window, batch=self.batches["menu_batch"])
+        menu_gui = glooey.Gui(
+            self.window,
+            batch=self.batches["menu_batch"],
+            group=self.gui_group
+        )
 
         v_container = glooey.VBox()
         v_container.alignment = "center"
@@ -101,10 +108,33 @@ class Game():
         with level_path.open(mode="r") as data:
             level_data = json.load(data)
 
+        # Loads the HUD of the main game
+        hud_gui = glooey.Gui(
+            self.window,
+            batch=self.batches["game_batch"],
+            group=self.gui_group
+        )
+        h_container = glooey.HBox()
+        h_container.alignment = "fill top"
+
+        self.level_lbl = Standared(
+            "Level: {}".format(self.current_level)
+        )
+        h_container.add(self.level_lbl)
+
+        self.score_lbl = Standared(
+            "Score: {}".format(self.score)
+        )
+        h_container.add(self.score_lbl)
+
+        hud_gui.add(h_container)
+
+        # Loads the items to populate the game
         self.player = player.Player(
             level_data["player_spawn"]["x"],
             level_data["player_spawn"]["y"],
-            batch=self.batches["game_batch"]
+            batch=self.batches["game_batch"],
+            group=self.game_group
         )
 
         self.platform_list = []
@@ -112,7 +142,8 @@ class Game():
             temp = platform.Platform(
                     i["x"],
                     i["y"],
-                    batch=self.batches["game_batch"]
+                    batch=self.batches["game_batch"],
+                    group=self.game_group
                 )
             temp.scale_x = i["scale_x"]
             self.platform_list.append(temp)
@@ -122,7 +153,8 @@ class Game():
             temp = coin.Coin(
                 x=i["x"],
                 y=i["y"],
-                batch=self.batches["game_batch"]
+                batch=self.batches["game_batch"],
+                group=self.game_group
             )
             self.coin_list.append(temp)
 
