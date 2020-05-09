@@ -12,12 +12,12 @@ from gui_assets.buttons import MenuButton
 from gui_assets.labels import Title, Standared
 
 
-class Window(pyglet.window.Window):
+class Game(pyglet.window.Window):
     '''
     The main game window
     '''
 
-    def __init__(self, width, height, batches, **kwargs):
+    def __init__(self, width, height, **kwargs):
         '''
         Loads the game window
         '''
@@ -25,9 +25,21 @@ class Window(pyglet.window.Window):
         self.width = width
         self.height = height
 
-        self.game_batch = batches["game_batch"]
-        self.menu_batch = batches["menu_batch"]
+        self.batches = {
+            "game_batch": pyglet.graphics.Batch(),
+            "menu_batch": pyglet.graphics.Batch(),
+        }
+        self.gui_group = pyglet.graphics.OrderedGroup(1)
+        self.game_group = pyglet.graphics.OrderedGroup(0)
 
+        self.set_caption("Pyglet Platformer")
+
+        self.load_menu_batch()
+
+        self.current_level = 0
+        self.score = 0
+
+        self.paused = False
         self.main_menu = True
 
     def on_draw(self):
@@ -36,36 +48,9 @@ class Window(pyglet.window.Window):
         '''
         self.clear()
         if self.main_menu:
-            self.menu_batch.draw()
+            self.batches["menu_batch"].draw()
         else:
-            self.game_batch.draw()
-
-
-class Game():
-    '''
-    Loads the game and contains all global varibales
-    '''
-
-    def __init__(self):
-        '''
-        Starts the game setup
-        '''
-        self.batches = {
-            "game_batch": pyglet.graphics.Batch(),
-            "menu_batch": pyglet.graphics.Batch(),
-        }
-        self.gui_group = pyglet.graphics.OrderedGroup(1)
-        self.game_group = pyglet.graphics.OrderedGroup(0)
-
-        self.window = Window(800, 600, self.batches)
-        self.window.set_caption("Pyglet Platformer")
-
-        self.load_menu_batch()
-
-        self.current_level = 0
-        self.score = 0
-
-        self.paused = False
+            self.batches["game_batch"].draw()
 
     def load_menu_batch(self):
         '''
@@ -73,7 +58,7 @@ class Game():
         '''
 
         menu_gui = glooey.Gui(
-            self.window,
+            self,
             batch=self.batches["menu_batch"],
             group=self.gui_group
         )
@@ -92,7 +77,7 @@ class Game():
         Loads the level
         '''
 
-        self.window.main_menu = False
+        self.main_menu = False
 
         self.load_level()
 
@@ -110,7 +95,7 @@ class Game():
 
         # Loads the HUD of the main game
         hud_gui = glooey.Gui(
-            self.window,
+            self,
             batch=self.batches["game_batch"],
             group=self.gui_group
         )
@@ -181,13 +166,13 @@ class Game():
         '''
         Quits the game
         '''
-        self.window.close()
+        self.close()
 
     def update(self, dt):
         '''
         Updates all loaded enities and passes required data
         '''
-        if self.paused or self.window.main_menu:
+        if self.paused or self.main_menu:
             return
 
         return_state = self.player.update(dt, self.collision_dict)
@@ -198,6 +183,6 @@ class Game():
 
 if __name__ == "__main__":
 
-    game = Game()
+    game = Game(800, 600)
     pyglet.clock.schedule_interval(game.update, 1/120.0)
     pyglet.app.run()

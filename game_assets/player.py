@@ -61,7 +61,9 @@ class Player(pyglet.sprite.Sprite):
         # Get distance using position tuples
         actual_distance = self.distance(self.position, other_object.position)
 
-        return (actual_distance <= collision_distance)
+        # Arbitaroy 0.17049 fixes alignment issue
+        # I have no idea what causes it
+        return (actual_distance+0.17049 <= collision_distance)
 
     def distance(self, point_1=(0, 0), point_2=(0, 0)):
         """
