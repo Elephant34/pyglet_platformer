@@ -116,6 +116,7 @@ class Game():
         )
         h_container = glooey.HBox()
         h_container.alignment = "fill top"
+        h_container.set_padding(10)
 
         self.level_lbl = Standared(
             "Level: {}".format(self.current_level)
@@ -126,6 +127,11 @@ class Game():
             "Score: {}".format(self.score)
         )
         h_container.add(self.score_lbl)
+
+        pause_btn = MenuButton("Pause", self.game_pause)
+        pause_btn.alignment = "right"
+        pause_btn.set_left_padding(100)
+        h_container.add(pause_btn)
 
         hud_gui.add(h_container)
 
@@ -158,6 +164,19 @@ class Game():
             )
             self.coin_list.append(temp)
 
+        self.collision_dict = {
+            "coins": self.coin_list,
+            "platforms": self.platform_list
+        }
+
+    def game_pause(self):
+        '''
+        Pauses the game
+        TODO: Loads an option list
+        '''
+        self.paused = not self.paused
+        print(self.paused)
+
     def exit_game(self):
         '''
         Quits the game
@@ -168,6 +187,13 @@ class Game():
         '''
         Updates all loaded enities and passes required data
         '''
+        if self.paused or self.window.main_menu:
+            return
+
+        return_state = self.player.update(dt, self.collision_dict)
+
+        if not return_state:
+            return
 
 
 if __name__ == "__main__":
