@@ -6,6 +6,7 @@ import pathlib
 
 import glooey
 import pyglet
+from pyglet.window import key
 
 from game_assets import player, coin, platform
 from gui_assets.buttons import MenuButton
@@ -36,6 +37,23 @@ class Game(pyglet.window.Window):
 
         self.load_menu_batch()
 
+        self.jump_keys = [
+            key.W,
+            key.UP
+        ]
+        self.left_keys = [
+            key.A,
+            key.LEFT
+        ]
+        self.right_keys = [
+            key.D,
+            key.RIGHT
+        ]
+        self.pause_keys = [
+            key.P,
+            key.ESCAPE
+        ]
+
         self.current_level = 0
         self.score = 0
 
@@ -51,6 +69,31 @@ class Game(pyglet.window.Window):
             self.batches["menu_batch"].draw()
         else:
             self.batches["game_batch"].draw()
+
+    def on_key_press(self, symbol, modifiers):
+        '''
+        Handles key presses
+        '''
+        if self.main_menu:
+            return
+
+        if symbol in self.pause_keys:
+            self.game_pause()
+
+        if self.paused:
+            return
+
+        if symbol in self.jump_keys:
+            print("jump")
+        elif symbol in self.left_keys:
+            print("left")
+        elif symbol in self.right_keys:
+            print("right")
+
+    def on_key_reslease(self, symbol, modifiers):
+        '''
+        Handles key releases
+        '''
 
     def load_menu_batch(self):
         '''
