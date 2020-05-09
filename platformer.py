@@ -84,16 +84,20 @@ class Game(pyglet.window.Window):
             return
 
         if symbol in self.jump_keys:
-            print("jump")
+            self.player.key_press("jump")
         elif symbol in self.left_keys:
-            print("left")
+            self.player.key_press("left")
         elif symbol in self.right_keys:
-            print("right")
+            self.player.key_press("right")
 
     def on_key_reslease(self, symbol, modifiers):
         '''
         Handles key releases
         '''
+        if symbol in self.left_keys:
+            self.player.key_press("left")
+        elif symbol in self.right_keys:
+            self.player.key_press("right")
 
     def load_menu_batch(self):
         '''
