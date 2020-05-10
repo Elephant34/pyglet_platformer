@@ -7,7 +7,6 @@ import pathlib
 import glooey
 import pyglet
 from pyglet.window import key
-
 from game_assets import player, coin, platform
 from gui_assets.buttons import MenuButton
 from gui_assets.labels import Title, Standared
@@ -90,14 +89,16 @@ class Game(pyglet.window.Window):
         elif symbol in self.right_keys:
             self.player.key_press("right")
 
-    def on_key_reslease(self, symbol, modifiers):
+    def on_key_release(self, symbol, modifiers):
         '''
         Handles key releases
         '''
         if symbol in self.left_keys:
-            self.player.key_press("left")
+            self.player.key_release("left")
         elif symbol in self.right_keys:
-            self.player.key_press("right")
+            self.player.key_release("right")
+        elif symbol in self.jump_keys:
+            self.player.key_release("jump")
 
     def load_menu_batch(self):
         '''
