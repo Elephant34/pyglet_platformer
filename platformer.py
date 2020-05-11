@@ -154,11 +154,14 @@ class Game(pyglet.window.Window):
         self.level_lbl = Standared(
             "Level: {}".format(self.current_level)
         )
+        self.level_lbl.alignement = "left"
+        self.level_lbl.set_right_padding(100)
         h_container.add(self.level_lbl)
 
         self.score_lbl = Standared(
             "Score: {}".format(self.score)
         )
+        self.score_lbl.alignment = "center"
         h_container.add(self.score_lbl)
 
         pause_btn = MenuButton("Pause", self.game_pause)
