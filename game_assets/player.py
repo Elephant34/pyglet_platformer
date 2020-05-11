@@ -44,11 +44,33 @@ class Player(pyglet.sprite.Sprite):
             "right": self.position[0] + self.image.width
         }
 
-        for obj in collision_objects["platforms"]:
-            for collision in self.get_collision_sides(obj):
-                print(collision)
+        move = {
+            "up": self.jump_speed if self.movement["jump"] else 0,
+            "down": self.gravity,
+            "left": self.walk_speed if self.movement["left"] else 0,
+            "right": self.walk_speed if self.movement["right"] else 0,
+        }
 
-        self.y -= 1
+        for obj in collision_objects["platforms"]:
+            collisions = [
+                collision for collision in self.get_collision_sides(obj)
+            ]
+
+            if "bottom" in collisions:
+                move["down"] = 0
+                self.y = obj.sides["top"]
+            if "top" in collisions:
+                move["up"] = 0
+            if "left" in collisions:
+                move["right"] = 0
+            if "right" in collisions:
+                move["left"] = 0
+
+        y_speed = move["up"] - move["down"]
+        x_speed = move["right"] - move["left"]
+
+        self.y += y_speed * dt
+        self.x += x_speed * dt
 
         return
 
@@ -100,7 +122,7 @@ class Player(pyglet.sprite.Sprite):
                 yield "top"
 
         # Tests if right side is inline with obj
-        if (self.sides["right"] > obj.sides["left"]
+        if (self.sides["right"] >= obj.sides["left"]
            and self.sides["right"] < obj.sides["right"]):
 
             # Tests if the object is above or below
@@ -110,7 +132,7 @@ class Player(pyglet.sprite.Sprite):
                 yield "right"
 
         # Tests if left side is inline with obj
-        if (self.sides["left"] < obj.sides["right"]
+        if (self.sides["left"] <= obj.sides["right"]
            and self.sides["left"] > obj.sides["left"]):
 
             # Tests if the object is above or below
