@@ -1,11 +1,11 @@
 {
     "player_spawn": {
-        "x": 10,
+        "x": 0,
         "y": 300
     },
     "platforms": [
         {
-            "x": 10,
+            "x": 50,
             "y": 50,
             "scale_x": 5
         }

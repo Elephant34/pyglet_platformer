@@ -178,14 +178,15 @@ class Game(pyglet.window.Window):
 
         self.platform_list = []
         for i in level_data["platforms"]:
-            temp = platform.Platform(
+            self.platform_list.append(
+                platform.Platform(
                     i["x"],
                     i["y"],
+                    i["scale_x"],
                     batch=self.batches["game_batch"],
                     group=self.game_group
                 )
-            temp.scale_x = i["scale_x"]
-            self.platform_list.append(temp)
+            )
 
         self.coin_list = []
         for i in level_data["coins"]:

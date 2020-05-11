@@ -10,7 +10,7 @@ class Platform(pyglet.sprite.Sprite):
     A platform which the player can stand on
     '''
 
-    def __init__(self, x, y, **kwargs):
+    def __init__(self, x, y, scale_x, **kwargs):
         '''
         Sets up the platform
         '''
@@ -21,3 +21,11 @@ class Platform(pyglet.sprite.Sprite):
 
         self.x = x
         self.y = y
+        self.scale_x = scale_x
+
+        self.sides = {
+            "top": self.position[1] + self.image.height,
+            "bottom": self.position[1],
+            "left": self.position[0],
+            "right": self.position[0] + (self.image.width*self.scale_x)
+        }

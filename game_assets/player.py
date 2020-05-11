@@ -37,35 +37,18 @@ class Player(pyglet.sprite.Sprite):
         Moves the player by player inputs
         '''
 
-        self.top_right = (
-            self.position[0]+self.image.width,
-            self.position[1]+self.image.height
-        )
-        self.bottom_left = self.position
+        self.sides = {
+            "top": self.position[1] + self.image.height,
+            "bottom": self.position[1],
+            "left": self.position[0],
+            "right": self.position[0] + self.image.width
+        }
 
-        move_left = self.walk_speed if self.movement["left"] else 0
-        move_right = self.walk_speed if self.movement["right"] else 0
-        move_down = self.gravity
-        move_up = self.jump_speed if self.movement["jump"] else 0
-
-        # Tests if the player has hit any of the platforms and from where
         for obj in collision_objects["platforms"]:
-            collision = self.get_collisions(obj)
+            for collision in self.get_collision_sides(obj):
+                print(collision)
 
-            print(collision)
-
-            if collision["left"]:
-                move_left = 0
-            if collision["right"]:
-                move_right = 0
-            if (collision["bottom"]
-               and not (collision["left"] or collision["right"])):
-                move_down = 0
-            if collision["top"]:
-                move_up = 0
-
-        self.x += (move_right - move_left) * dt
-        self.y += (move_up - move_down) * dt
+        self.y -= 1
 
         return
 
@@ -91,43 +74,47 @@ class Player(pyglet.sprite.Sprite):
         elif key == "jump":
             self.movement["jump"] = False
 
-    def get_collisions(self, obj):
+    def get_collision_sides(self, obj):
         '''
-        Tests is the player and object have collided
+        Returns a dictionary of player surfaces in contact with object
         '''
 
-        obj_top_right = (
-            obj.position[0]+obj.image.width,
-            obj.position[1]+obj.image.height
-        )
-        obj_bottom_left = obj.position
+        # Tests if the bototm is inline with obj
+        if (self.sides["bottom"] <= obj.sides["top"]
+           and self.sides["bottom"] > obj.sides["bottom"]):
 
-        # Presumes collisions on all sides of player
-        collision = {
-            "right": False,
-            "left": False,
-            "top": False,
-            "bottom": False
-        }
+            # Ensures player isn't to left or right
+            if not (self.sides["left"] > obj.sides["right"]
+                    or self.sides["right"] < obj.sides["left"]):
 
-        if (self.bottom_left[1] <= obj_top_right[1]
-           and self.top_right[1] > obj_top_right[1]):
+                yield "bottom"
 
-            collision["bottom"] = True
+        # Tests if the top is inline with obj
+        if (self.sides["top"] >= obj.sides["bottom"]
+           and self.sides["top"] < obj.sides["top"]):
 
-        elif (self.top_right[1] <= obj_bottom_left[1]
-              and self.bottom_left[1] > obj_bottom_left[1]):
+            # Ensures player isn't to left or right
+            if not (self.sides["left"] > obj.sides["right"]
+                    or self.sides["right"] < obj.sides["left"]):
 
-            collision["top"] = True
+                yield "top"
 
-        elif (self.bottom_left[0] <= obj_top_right[0]
-              and self.top_right[0] > obj_top_right[0]):
+        # Tests if right side is inline with obj
+        if (self.sides["right"] > obj.sides["left"]
+           and self.sides["right"] < obj.sides["right"]):
 
-            collision["right"] = True
+            # Tests if the object is above or below
+            if not (self.sides["top"] <= obj.sides["bottom"]
+                    or self.sides["bottom"] >= obj.sides["top"]):
 
-        elif (self.top_right[0] <= obj_bottom_left[0]
-              and self.bottom_left[0] > obj_bottom_left[0]):
+                yield "right"
 
-            collision["left"] = True
+        # Tests if left side is inline with obj
+        if (self.sides["left"] < obj.sides["right"]
+           and self.sides["left"] > obj.sides["left"]):
 
-        return collision
+            # Tests if the object is above or below
+            if not (self.sides["top"] <= obj.sides["bottom"]
+                    or self.sides["bottom"] >= obj.sides["top"]):
+
+                yield "left"
