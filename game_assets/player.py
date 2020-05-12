@@ -26,6 +26,8 @@ class Player(pyglet.sprite.Sprite):
         self.walk_speed = 500
         self.jump_speed = 600
 
+        self.on_bottom = False
+
         self.movement = {
             "left": False,
             "right": False,
@@ -59,6 +61,7 @@ class Player(pyglet.sprite.Sprite):
             if "bottom" in collisions:
                 move["down"] = 0
                 self.y = obj.sides["top"]
+                self.on_bottom = True
             if "top" in collisions:
                 move["up"] = 0
                 self.y = obj.sides["bottom"] - self.image.height
@@ -72,6 +75,9 @@ class Player(pyglet.sprite.Sprite):
         y_speed = move["up"] - move["down"]
         x_speed = move["right"] - move["left"]
 
+        if y_speed > 0:
+            self.on_bottom = False
+
         self.y += y_speed * dt
         self.x += x_speed * dt
 
@@ -81,7 +87,7 @@ class Player(pyglet.sprite.Sprite):
         '''
         Handels relevant key inputs from the main window
         '''
-        if key == "jump":
+        if key == "jump" and self.on_bottom:
             self.movement["jump"] = True
         elif key == "left":
             self.movement["left"] = True
