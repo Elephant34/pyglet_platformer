@@ -36,6 +36,7 @@ class Game(pyglet.window.Window):
 
         self.load_menu_batch()
 
+        # Sets up all valid key presses
         self.jump_keys = [
             key.W,
             key.UP
@@ -53,6 +54,7 @@ class Game(pyglet.window.Window):
             key.ESCAPE
         ]
 
+        # These varables are needed globally so initate them here
         self.current_level = 0
         self.score = 0
 
@@ -73,6 +75,7 @@ class Game(pyglet.window.Window):
         '''
         Handles key presses
         '''
+        # No key presses should be regestered on main menu
         if self.main_menu:
             return
 
@@ -80,6 +83,7 @@ class Game(pyglet.window.Window):
             self.game_pause()
 
         if self.paused:
+            # Game inputs shouldn't be handeled on pause
             return
 
         if symbol in self.jump_keys:
@@ -103,6 +107,7 @@ class Game(pyglet.window.Window):
     def load_menu_batch(self):
         '''
         Loads all of the items for the main menu GUI
+        This is done via glooey
         '''
 
         menu_gui = glooey.Gui(
