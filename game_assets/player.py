@@ -88,7 +88,13 @@ class Player(pyglet.sprite.Sprite):
 
         self.jump_timer += dt
 
-        return
+        for obj in collision_objects["coins"]:
+            if self.get_collision(obj):
+                obj.visible = False
+
+                return ["coin", obj]
+
+        return None
 
     def key_press(self, key):
         '''
@@ -157,3 +163,21 @@ class Player(pyglet.sprite.Sprite):
                     or self.sides["bottom"] >= obj.sides["top"]):
 
                 yield "right"
+
+    def get_collision(self, obj):
+        '''
+        Tests if the player is collided
+        This will only return boolean
+        '''
+
+        # If one object is on left side of other
+        if(self.sides["left"] >= obj.sides["right"]
+           or obj.sides["left"] >= self.sides["right"]):
+            return False
+
+        # If one object is above other
+        if(self.sides["bottom"] >= obj.sides["top"]
+           or obj.sides["bottom"] >= self.sides["top"]):
+            return False
+
+        return True

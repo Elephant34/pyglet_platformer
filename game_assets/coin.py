@@ -22,3 +22,10 @@ class Coin(pyglet.sprite.Sprite):
 
         self.x = x
         self.y = y
+
+        self.sides = {
+            "top": self.position[1] + self.image.height,
+            "bottom": self.position[1],
+            "left": self.position[0],
+            "right": self.position[0] + (self.image.width*self.scale_x)
+        }

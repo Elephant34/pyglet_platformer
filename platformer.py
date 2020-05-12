@@ -237,6 +237,15 @@ class Game(pyglet.window.Window):
         if not return_state:
             return
 
+        if return_state[0] == "coin":
+            self.score += 100
+            self.score_lbl.set_text("Score: " + str(self.score))
+
+            self.collision_dict["coins"].remove(return_state[1])
+
+            if len(self.collision_dict["coins"]) == 0:
+                print("Level complete")
+
 
 if __name__ == "__main__":
 
