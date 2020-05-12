@@ -61,6 +61,7 @@ class Player(pyglet.sprite.Sprite):
                 self.y = obj.sides["top"]
             if "top" in collisions:
                 move["up"] = 0
+                self.y = obj.sides["bottom"] - self.image.height
             if "left" in collisions:
                 move["right"] = 0
                 self.x = obj.sides["left"] - self.image.width
