@@ -24,7 +24,7 @@ class Player(pyglet.sprite.Sprite):
 
         self.gravity = 300
         self.walk_speed = 500
-        self.jump_speed = 700
+        self.jump_speed = 600
 
         self.on_bottom = False
         self.jump_timer = 0

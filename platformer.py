@@ -198,13 +198,14 @@ class Game(pyglet.window.Window):
 
         self.coin_list = []
         for i in level_data["coins"]:
-            temp = coin.Coin(
-                x=i["x"],
-                y=i["y"],
-                batch=self.batches["game_batch"],
-                group=self.game_group
+            self.coin_list.append(
+                coin.Coin(
+                    x=i["x"],
+                    y=i["y"],
+                    batch=self.batches["game_batch"],
+                    group=self.game_group
+                )
             )
-            self.coin_list.append(temp)
 
         self.collision_dict = {
             "coins": self.coin_list,
